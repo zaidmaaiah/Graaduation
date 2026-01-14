@@ -1,52 +1,11 @@
 import { useState, useEffect } from 'react';
 import { updateProfile, getProfile } from '../../api/profile';
-
-const SkillsInput = ({ label, skills, setSkills }) => {
-  const addSkill = () => {
-    setSkills([...skills, '']);
-  };
-
-  const removeSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
-  };
-
-  const updateSkill = (index, value) => {
-    const updated = [...skills];
-    updated[index] = value;
-    setSkills(updated);
-  };
-
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-2">
-        <label className="text-sm font-medium">{label}</label>
-        <button type="button" onClick={addSkill} className="text-xs px-2 py-1 bg-gray-200">
-          + Add
-        </button>
-      </div>
-      <div className="max-h-40 overflow-y-auto border p-2 space-y-2">
-        {skills.map((skill, index) => (
-          <div key={index} className="flex gap-2">
-            <input
-              type="text"
-              value={skill}
-              onChange={(e) => updateSkill(index, e.target.value)}
-              className="flex-1 p-2 border text-sm"
-              placeholder={`${label.split(' ')[0]} skill`}
-            />
-            <button
-              type="button"
-              onClick={() => removeSkill(index)}
-              className="px-3 py-2 bg-red-100 text-red-800 text-sm"
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import Alert from '../../components/Alert';
+import Checkbox from '../../components/Checkbox';
+import SkillsInput from '../../components/SkillsInput';
+import UserInfo from '../../components/UserInfo';
 
 const ProfileUser = ({ user, token, onLogout }) => {
   const [loading, setLoading] = useState(false);
@@ -57,7 +16,6 @@ const ProfileUser = ({ user, token, onLogout }) => {
   const [fieldSkills, setFieldSkills] = useState(['']);
   const [softSkills, setSoftSkills] = useState(['']);
   const [profileId, setProfileId] = useState(null);
-
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -111,55 +69,63 @@ const ProfileUser = ({ user, token, onLogout }) => {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <div className="mb-6">
-        <p className="text-sm text-gray-600">Name: {user?.name || 'Not set'}</p>
-        <p className="text-sm text-gray-600">Email: {user?.email}</p>
-      </div>
+      <UserInfo user={user} />
 
       <h1 className="text-xl font-bold mb-4">Profile</h1>
 
-      {message.text && (
-        <div className={`mb-4 p-2 text-sm ${
-          message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
-          {message.text}
-        </div>
-      )}
+      <Alert message={message.text} type={message.type} />
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
+        <Input
           type="text"
           name="seekedJobTitle"
           required
-          className="w-full p-2 border"
           placeholder="Seeked Job Title"
         />
 
-        <SkillsInput label="Technical Skills" skills={technicalSkills} setSkills={setTechnicalSkills} />
-        <SkillsInput label="Job Position Skills" skills={jobPositionSkills} setSkills={setJobPositionSkills} />
-        <SkillsInput label="Field Skills" skills={fieldSkills} setSkills={setFieldSkills} />
-        <SkillsInput label="Soft Skills" skills={softSkills} setSkills={setSoftSkills} />
+        <SkillsInput 
+          label="Technical Skills" 
+          skills={technicalSkills} 
+          setSkills={setTechnicalSkills} 
+        />
+        
+        <SkillsInput 
+          label="Job Position Skills" 
+          skills={jobPositionSkills} 
+          setSkills={setJobPositionSkills} 
+        />
+        
+        <SkillsInput 
+          label="Field Skills" 
+          skills={fieldSkills} 
+          setSkills={setFieldSkills} 
+        />
+        
+        <SkillsInput 
+          label="Soft Skills" 
+          skills={softSkills} 
+          setSkills={setSoftSkills} 
+        />
 
-        <input
+        <Input
           type="text"
           name="experience"
           required
-          className="w-full p-2 border"
           placeholder="Experience"
         />
 
-        <label className="flex items-center text-sm">
-          <input type="checkbox" name="notifications" className="mr-2" />
-          Receive job notifications
-        </label>
+        <Checkbox 
+          name="notifications" 
+          label="Receive job notifications" 
+        />
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full p-2 bg-black text-white"
+          variant="primary"
         >
           {loading ? '...' : 'Save'}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { login, register } from '../../api/auth';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import Alert from '../../components/Alert';
 
 const ProfileAuth = ({ onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -42,36 +45,30 @@ const ProfileAuth = ({ onAuthSuccess }) => {
         {isLogin ? 'Login' : 'Sign Up'}
       </h1>
 
-      {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-800 text-sm">
-          {error}
-        </div>
-      )}
+      <Alert message={error} type="error" />
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <input
+        <Input
           type="email"
           name="email"
           required
-          className="w-full p-2 border"
           placeholder="Email"
         />
 
-        <input
+        <Input
           type="password"
           name="password"
           required
-          className="w-full p-2 border"
           placeholder="Password"
         />
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full p-2 bg-black text-white"
+          variant="primary"
         >
           {loading ? '...' : (isLogin ? 'Login' : 'Sign Up')}
-        </button>
+        </Button>
       </form>
 
       <p className="text-sm text-gray-600 mt-4">
