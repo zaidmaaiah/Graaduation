@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import ProfileAuth from './components/ProfileAuth';
-import ProfileUser from './components/ProfileUser';
-import JobsView from './components/JobsView';
+import ProfileAuth from './Pages/user/ProfileAuth';
+import ProfileUser from './Pages/user/ProfileUser';
+import JobsView from './Pages/user/JobsView';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
