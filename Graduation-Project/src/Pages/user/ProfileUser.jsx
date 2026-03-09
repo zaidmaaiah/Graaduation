@@ -25,7 +25,7 @@ const ProfileUser = ({ user, token, onLogout }) => {
       try {
         const storedProfileId = localStorage.getItem('profileId');
         if (storedProfileId && user?.jobSeekerId) {
-          const profile = await getProfile(token, user.jobSeekerId, storedProfileId);
+          const profile = await getProfile(token, storedProfileId);
           
           setProfileId(profile.id);
           setTechnicalSkills(profile.technicalSkills || ['']);
@@ -137,7 +137,7 @@ const ProfileUser = ({ user, token, onLogout }) => {
         />
 
         <Checkbox 
-          name="notifications" 
+          name="receiveNotifications" 
           label="Receive job notifications" 
         />
 

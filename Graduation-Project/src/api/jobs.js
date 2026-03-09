@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://localhost:5000';
 
 // Endpoint: GET api/{jobseeker_id}/jobs
 export const getRecommendedJobs = async (token, jobSeekerId, profileId = null) => {
