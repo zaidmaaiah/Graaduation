@@ -57,7 +57,7 @@ const ProfileUser = ({ user, token, onLogout }) => {
 
     const formData = new FormData(e.target);
     
-    // Add CV file if selected
+    
     if (cvFile) {
       formData.append('cv', cvFile);
     }
