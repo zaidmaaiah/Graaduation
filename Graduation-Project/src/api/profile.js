@@ -1,6 +1,8 @@
-const API_URL = 'https://localhost:5000';
 import snakecaseKeys from "snakecase-keys";
-// Endpoint: POST api/{jobseeker_id}/profile or PUT api/{jobseeker_id}/{profile_id}/profile
+
+const API_URL = 'https://localhost:5000';
+
+// Endpoint: POST api/profile/{jobseeker_id}/save OR PUT api/profile/{profile_id}/update
 export const updateProfile = async (formData, token, jobSeekerId, profileId = null) => {
   const seekedJobTitle = formData.get('seekedJobTitle');
   const experience = formData.get('experience');
@@ -26,10 +28,10 @@ export const updateProfile = async (formData, token, jobSeekerId, profileId = nu
   const url = profileId 
     ? `${API_URL}/api/profile/${profileId}/update` 
     : `${API_URL}/api/profile/${jobSeekerId}/save`;
-  console.log(url);
+  
   const method = profileId ? 'PUT' : 'POST';
   const snakedProfileData = snakecaseKeys(profileData);
-  console.log(snakedProfileData);
+
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -38,7 +40,7 @@ export const updateProfile = async (formData, token, jobSeekerId, profileId = nu
     },
     body: JSON.stringify(snakedProfileData)
   });
-  console.log(snakedProfileData);
+
   if (!response.ok) {
     const data = await response.json();
     throw new Error(data.message || 'Failed to update profile');
@@ -47,30 +49,7 @@ export const updateProfile = async (formData, token, jobSeekerId, profileId = nu
   return response.json();
 };
 
- // Endpoint: POST api/{jobseeker_id}/{profile_id}/upload_cv
-export const uploadCV = async (cvFile, token, jobSeekerId, profileId) => {
-  const formData = new FormData();
-  formData.append('cv', cvFile);
-
-  const response = await fetch(`${API_URL}/api/${jobSeekerId}/${profileId}/upload_cv`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-    body: formData
-  });
-  
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || 'Failed to upload CV');
-  }
-  
-  return response.json();
-};
-
-
- // Endpoint: GET api/{jobseeker_id}/{profile_id}/profile
-
+// Endpoint: GET api/profile/{profile_id}
 export const getProfile = async (token, profileId) => {
   const response = await fetch(`${API_URL}/api/profile/${profileId}`, {
     method: 'GET',
@@ -87,19 +66,3 @@ export const getProfile = async (token, profileId) => {
   
   return response.json();
 };
-
-// Endpoint: GET api/{jobseeker_id}/profile_id
-export const getProfileIdForUser = async (token, jobSeekerId) => {
-  const response = await fetch(`${API_URL}/api/profile/${jobSeekerId}/profile_id`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  });
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || 'Failed to fetch profile ID');
-  }
-  return response.json();
-}
